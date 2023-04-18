@@ -1,4 +1,5 @@
 import socket
+import sys
 
 HOST = ''
 PORTA = 5000
@@ -20,6 +21,7 @@ while True:
         break
     else:
         print(msg.decode('utf-8'), end='')
+        sys.stdout.flush()
         novoSock.send(msg)
 
 novoSock.close()
