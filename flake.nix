@@ -11,26 +11,42 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        myShell = input@{
+            name,
+            buildInputs ? [],
+            toShellName ? n: "${n}-shell",
+            shellHook ? { shellName, ... }: ''
+              export PS1="\n\[\033[1;32m\][${shellName}: \w]\n\$\[\033[0m\] "
+              export PURE="$([[ $IN_NIX_SHELL = 'pure' ]] && echo 1 || echo 0)"
+              echo "PURE=$PURE"
+              echo -n '>> Welcome to ${shellName}! <<'
+            '',
+          }: pkgs.mkShell {
+            name = toShellName name;
+
+            buildInputs = buildInputs;
+
+            shellHook = shellHook
+              (input // { shellName = toShellName name; });
+          };
       in {
         devShells = let
             inself = self.devShells.${system};
         in {
           default = inself.python;
         
-          python = pkgs.mkShell rec {
-            name = "python-shell";
+          python = myShell {
+            name = "python";
 
             buildInputs = with pkgs; [
               python310
               mypy
             ];
+          };
 
-            shellHook = ''
-              export PS1="\n\[\033[1;32m\][${name}: \w]\n\$\[\033[0m\] "
-              export PURE="$([[ $IN_NIX_SHELL = 'pure' ]] && echo 1 || echo 0)"
-              echo "PURE=$PURE"
-              echo -n '>> Welcome to ${name}! <<'
-            '';
+          slides = myShell {
+            name = "slides";
+            buildInputs = with pkgs; [ slides ];
           };
       };
     });
