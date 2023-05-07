@@ -39,6 +39,7 @@
             name = "python";
 
             buildInputs = with pkgs; [
+              less
               python310
               mypy
             ];
