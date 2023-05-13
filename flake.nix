@@ -1,5 +1,5 @@
 {
-  description = "A flake to run Julia for 'Algebra Linear Aplicada'";
+  description = "A flake to run Python for 'Sistemas Distribuidos'";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.11";
@@ -16,7 +16,7 @@
             buildInputs ? [],
             toShellName ? n: "${n}-shell",
             shellHook ? { shellName, ... }: ''
-              export PS1="\n\[\033[1;32m\][${shellName}: \w]\n\$\[\033[0m\] "
+              export PS1="\n\[\033[1;32m\][${shellName}: \W]\n\$\[\033[0m\] "
               export PURE="$([[ $IN_NIX_SHELL = 'pure' ]] && echo 1 || echo 0)"
               echo "PURE=$PURE"
               echo -n '>> Welcome to ${shellName}! <<'
