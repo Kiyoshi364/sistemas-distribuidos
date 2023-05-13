@@ -38,10 +38,21 @@
           python = myShell {
             name = "python";
 
-            buildInputs = with pkgs; [
-              less
-              python310
+            buildInputs = with pkgs.python310Packages; [
+              pkgs.less
+              pkgs.python310
               mypy
+            ];
+          };
+
+          rpc = myShell {
+            name = "python-rpyc";
+
+            buildInputs = with pkgs.python310Packages; [
+              pkgs.less
+              pkgs.python310
+              mypy
+              rpyc
             ];
           };
 
